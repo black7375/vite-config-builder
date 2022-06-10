@@ -23,7 +23,7 @@ function userConfig(viteConfigEnv: ConfigEnv) {
       }
     },
   });
- 
+
   if (ViteEnv.isDevBuild()) {
     configs.add({
       build: {
@@ -40,7 +40,7 @@ function userConfig(viteConfigEnv: ConfigEnv) {
       }
     });
   }
-  
+
   return configs;
 }
 

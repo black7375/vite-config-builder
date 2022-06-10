@@ -53,7 +53,8 @@ export class PluginBuilder implements UserConfigBuilderI<PluginOption> {
 // == Vite Env ================================================================
 export class ViteEnv {
   private static COMMAND: ConfigEnv["command"] = "build";
-  private static MODE: ConfigEnv["mode"] = process.env.NODE_ENV;
+  private static MODE: ConfigEnv["mode"] =
+    process.env.NODE_ENV || "development";
 
   public static set(command: ConfigEnv["command"], mode: ConfigEnv["mode"]) {
     ViteEnv.COMMAND = command;
