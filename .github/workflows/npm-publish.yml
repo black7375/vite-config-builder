@@ -11,41 +11,26 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - branch: master
-            token: NPM_TOKEN
-            registry: https://registry.npmjs.org/
-          - branch: github-repo
-            token: GITHUB_TOKEN
-            registry: https://npm.pkg.github.com/
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
       with:
-        ref: ${{ matrix.branch }}
-    - name: Merge master -> github-repo
-      if: matrix.branch == 'github-repo'
-      uses: devmasx/merge-branch@1.4.0
-      with:
-        type: now
-        from_branch: master
-        target_branch: github-repo
-        github_token: ${{ secrets[matrix.token] }}
-    - uses: actions/setup-node@v1
-      with:
-        registry-url: ${{ matrix.registry }}
-    - name: node cache
-      id: node-cache
-      uses: actions/cache@v2
-      with:
-        path: .yarn
-        key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-    - run: yarn install
+        cache: "yarn"
+        registry-url: https://registry.npmjs.org/
+    - run: yarn install --immutable
     - run: yarn build
-    - run: npm publish
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets[matrix.token] }}
+    - name: yarn publish npm
+      run: |
+        yarn config set npmAuthToken ${{ secrets.NPM_TOKEN }}
+        yarn npm publish
+    - uses: actions/setup-node@v3
+      with:
+        registry-url: https://npm.pkg.github.com/
+    - name: set env
+      run: |
+        echo "PKG_NAME=${{ github.repository_owner }}/$(jq .name package.json | tr -d '\"')" >> $GITHUB_ENV
+    - name: yarn publish github
+      run: |
+        sed -i 's+"name": ".*+"name": "${{ env.PKG_NAME }}",+gI' ./package.json
+        yarn config set npmAuthToken ${{ secrets.GITHUB_TOKEN }}
+        yarn npm publish
