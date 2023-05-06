@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "vite-config-builder",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "type": "module",
   "typings": "dist/index.d.ts",
@@ -23,15 +23,20 @@
     "check": "yarn run -T tsc --noEmit"
   },
   "devDependencies": {
-    "@types/node": "^17.0.35",
-    "typescript": "^4.7.2",
-    "vite": "^2.9.9",
-    "vite-plugin-dts": "^1.2.0"
+    "@types/node": "^20.1.0",
+    "terser": "^5.17.1",
+    "typescript": "^5.0.4",
+    "vite": "^4.3.5",
+    "vite-plugin-dts": "^2.3.0",
+    "vitest": "^0.31.0"
   },
   "dependencies": {
-    "pkg-dir": "^6.0.1",
-    "tslib": "^2.4.0",
+    "pkg-dir": "^7.0.0",
+    "tslib": "^2.5.0",
     "webpack-merge": "^5.8.0"
   },
-  "packageManager": "yarn@3.2.1"
+  "packageManager": "yarn@3.2.1",
+  "peerDependencies": {
+    "vite": "*"
+  }
 }
