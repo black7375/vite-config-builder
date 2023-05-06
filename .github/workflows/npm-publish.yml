@@ -28,7 +28,7 @@ jobs:
         registry-url: https://npm.pkg.github.com/
     - name: set env
       run: |
-        echo "PKG_NAME=$@{{ github.repository_owner }}/$(jq .name package.json | tr -d '\"')" >> $GITHUB_ENV
+        echo "PKG_NAME=@${{ github.repository_owner }}/$(jq .name package.json | tr -d '\"')" >> $GITHUB_ENV
     - name: yarn publish github
       run: |
         sed -i 's+"name": ".*+"name": "${{ env.PKG_NAME }}",+gI' ./package.json
