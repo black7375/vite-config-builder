@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "vite-config-builder",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "license": "MIT",
   "type": "module",
   "typings": "dist/index.d.ts",
@@ -9,8 +9,14 @@
   "module": "dist/index.mjs",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "require": {
+        "types": "./dist/cjs/index.d.cts",
+        "default": "./dist/cjs/index.cjs"
+      },
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      }
     }
   },
   "files": [
@@ -23,17 +29,17 @@
     "check": "yarn run -T tsc --noEmit"
   },
   "devDependencies": {
-    "@types/node": "^20.1.0",
-    "terser": "^5.17.1",
-    "typescript": "^5.0.4",
-    "vite": "^4.3.5",
-    "vite-plugin-dts": "^2.3.0",
-    "vitest": "^0.31.0"
+    "@types/node": "^24.7.0",
+    "terser": "^5.44.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.9",
+    "vite-plugin-dts-build": "^0.2.2",
+    "vitest": "^3.2.4"
   },
   "dependencies": {
-    "pkg-dir": "^7.0.0",
-    "tslib": "^2.5.0",
-    "webpack-merge": "^5.8.0"
+    "pkg-dir": "^9.0.0",
+    "tslib": "^2.8.1",
+    "webpack-merge": "^6.0.1"
   },
   "packageManager": "yarn@3.2.1",
   "peerDependencies": {
