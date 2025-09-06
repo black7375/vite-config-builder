@@ -6,14 +6,14 @@ name: Publishing
 on:
   push:
     tags:
-      'v*'
+      - 'v*'
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
+    - uses: actions/checkout@v5
+    - uses: actions/setup-node@v5
       with:
         cache: "yarn"
         registry-url: https://registry.npmjs.org/
@@ -23,15 +23,17 @@ jobs:
       run: |
         yarn config set npmAuthToken ${{ secrets.NPM_TOKEN }}
         yarn npm publish
-    - uses: actions/setup-node@v3
+    - uses: actions/setup-node@v5
       with:
         registry-url: https://npm.pkg.github.com/
-    - name: set env
+    - name: set package name
+      id: pkg_info
       run: |
-        echo "PKG_NAME=@${{ github.repository_owner }}/$(jq .name package.json | tr -d '\"')" >> $GITHUB_ENV
+        PKG_NAME="@${{ github.repository_owner }}/$(jq .name package.json | tr -d '\"')"
+        echo "name=$PKG_NAME" >> $GITHUB_OUTPUT
     - name: yarn publish github
       run: |
-        sed -i 's+"name": ".*+"name": "${{ env.PKG_NAME }}",+gI' ./package.json
+        sed -i 's+"name": ".*+"name": "${{ steps.pkg_info.outputs.name }}",+gI' ./package.json
         yarn install
         yarn config set npmAuthToken ${{ secrets.GITHUB_TOKEN }}
         yarn npm publish
