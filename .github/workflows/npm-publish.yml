@@ -34,6 +34,6 @@ jobs:
     - name: yarn publish github
       run: |
         sed -i 's+"name": ".*+"name": "${{ steps.pkg_info.outputs.name }}",+gI' ./package.json
-        yarn install
+        yarn install --no-immutable
         yarn config set npmAuthToken ${{ secrets.GITHUB_TOKEN }}
         yarn npm publish
